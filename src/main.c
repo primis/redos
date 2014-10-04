@@ -3,29 +3,38 @@
 
 #include <kernel/vga.h>
 #include <kernel/setup.h>
-
+#include <kernel/pit.h>
 int main() {
     
     vgaInit();
 
-    vgaWrite("Setting up the GDT...\t\t");
+    vgaWrite("Setting up the GDT...\t\t\t\t\t");
     gdtInit();
     vgaSetAttribute(0x42);
     vgaWrite("[ OK ]\n");
     vgaSetAttribute(0);
     
-    vgaWrite("Setting up the IDT...\t\t");
+    vgaWrite("Setting up the IDT...\t\t\t\t\t");
     idtInit();
     vgaSetAttribute(0x42);
     vgaWrite("[ OK ]\n");
     vgaSetAttribute(0);
 
-    vgaWrite("Turning on the PIC's...\t\t");
+    vgaWrite("Turning on the PIC's...\t\t\t\t\t");
     vgaSetAttribute(0x42);
     picInit();
     vgaWrite("[ OK ]\n");
     vgaSetAttribute(0);
+    
+    vgaWrite("Setting up the Timer at 100Hz...\t\t\t");
+    vgaSetAttribute(0x42);
+    pitInit(100);
+    vgaWrite("[ OK ]\n");
+    vgaSetAttribute(0);
 
-    vgaWrite("Welcome To Red-OS!\n");
-    for(;;);
+    vgaWrite("\t\t\t    Welcome To Red-OS!\n");
+    for(;;) {
+        sleep(1);
+        vgaWrite("TICK! \n");
+    }   
 }

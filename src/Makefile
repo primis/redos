@@ -1,4 +1,4 @@
-SOURCES = start.o main.o vga.o ports.o gdt.o string.o ivt.o idt.o pic.o
+SOURCES = start.o main.o vga.o ports.o gdt.o string.o ivt.o idt.o pic.o pit.o
 
 # Kernel Makefile
 LD		= i586-elf-ld

@@ -4,5 +4,5 @@
 // void vgaInit();
 void picInit();
 void idtInit();
-
+void pitInit(unsigned int Hz);
 #endif

@@ -3,6 +3,8 @@
 #include <kernel/callback.h>
 
 void interuptHandlerRegister(unsigned char, void_callback_arg_t);
+void clearIRQMask(int);
+void setIRQMask(int);
 
 struct idt_entry_struct
 {
