@@ -18,6 +18,7 @@ MB_CHECKSUM     equ -(MB_MAGIC + MB_FLAGS)
 [BITS 32]
 [GLOBAL mboot]
 [GLOBAL start]
+[GLOBAL gdt_flush]
 [EXTERN main]
 [EXTERN code]
 [EXTERN bss]
@@ -43,6 +44,20 @@ start:
     call main
     cli
     jmp $
+
+
+gdt_flush:
+    mov eax, [esp+4]
+    lgdt [eax]
+    mov ax, 0x10
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
+    jmp 0x08:.flush
+.flush:
+    ret
 
 section .bss
 ALIGN 32

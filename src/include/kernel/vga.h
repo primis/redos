@@ -4,5 +4,5 @@
 void vgaPutChar(char _c);
 void vgaWrite(char *_s);
 void vgaInit();
-
+void vgaSetAttribute(char a);
 #endif

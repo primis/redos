@@ -5,13 +5,12 @@
 #define VGAPORT 0x3D4
 #define VGALOC 0xB8000
 
-
 unsigned short *vgaTextBuffer;
 unsigned short vgaAttribute;
 unsigned char  vgaCursorX, vgaCursorY;
 
 void vgaScroll() {
-    unsigned int blank = ' ' | (0xC0 << 8);
+    unsigned int blank = ' ' | vgaAttribute;
     if(vgaCursorY >= 25) { 
         int i;
         for(i=0; i<24*80; i++) {
@@ -35,7 +34,7 @@ static void vgaMoveCursor(unsigned char _x, unsigned char _y) {
 }
 
 void vgaClear() {
-    unsigned int blank = ' ' | (0xC0 << 8);
+    unsigned int blank = ' ' | vgaAttribute;
     int i;
     for(i=1;i<25*80;i++) {
         vgaTextBuffer[i] = blank;
@@ -60,7 +59,7 @@ void vgaPutChar(char _c) {
         vgaClear();
     } else if (_c >= ' ') {
         loc = vgaTextBuffer + vgaCursorX + (vgaCursorY * 80);
-        *loc = (unsigned short)_c | (0xC0 << 8);
+        *loc = (unsigned short)_c | vgaAttribute;
         vgaCursorX++;
     } 
     if (vgaCursorX >= 80) {
@@ -74,8 +73,14 @@ void vgaWrite(char *_s) {
         vgaPutChar(*_s++);
     }
 }
-
+void vgaSetAttribute(char a) {
+    vgaAttribute = (a << 8);
+    if(a == 0) {
+        vgaAttribute = (0x4f << 8);
+    }
+}
 void vgaInit() {
+    vgaAttribute = (0x4F << 8);
     vgaTextBuffer = (unsigned short*)VGALOC;
     vgaClear();
 }
