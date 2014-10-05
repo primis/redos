@@ -242,8 +242,6 @@ void subtractMe()
 
 void init_shell()
 {
-    int c;          // c for color!
-    c = 3;
     printf("\nConfiguring Shell Subsystem... \n");
 	clearCommands();
     cmdString[0] = 0;
@@ -268,6 +266,6 @@ void init_shell()
 	printf("Username: ");
 	gets(prompt);
 	strcat(prompt, "$ ");
-	puts("\f");                     // Clear the Screen
+	putchar('\f');                     // Clear the Screen
 	printf("RedOS Shell Version %s\n", SHELL_VER);
 }

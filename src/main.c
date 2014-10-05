@@ -40,9 +40,9 @@ int main() {
     initKeyboard();
     vgaWrite("[ OK ]\n");
     vgaSetAttribute(0);
-    
+    readRTC();
     vgaWrite("\t\t\t    Welcome To Red-OS!\n");
-    printf("Boot Time: %X", getTime());   
+    printf("Boot Time: %d",getTime());   
     init_shell();
 
     for(;;)
