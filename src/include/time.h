@@ -4,7 +4,7 @@
 int getTime();
 void readRTC();
 
-extern char minute, second, hour, day, month, year;
-
+extern char minute, second, hour, day, month;
+extern int year;
 
 #endif
