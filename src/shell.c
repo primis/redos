@@ -244,7 +244,7 @@ void init_shell()
 {
     int c;          // c for color!
     c = 3;
-    printf("Configuring Shell Subsystem... ");
+    printf("\nConfiguring Shell Subsystem... \n");
 	clearCommands();
     cmdString[0] = 0;
 	cmdSwitch0[0] = 0;
