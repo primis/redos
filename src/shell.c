@@ -2,6 +2,7 @@
 #include <string.h>
 #include <kernel/kb.h>
 #include <kernel/command.h>
+#include <time.h>
 
 #define SHELL_VER "0.1" // Version of the Shell
 #define MaxCommands 16  // Maximum alloted command slots since we're not using malloc
@@ -92,7 +93,6 @@ void clearCommands() /* Clear all address pointers of our Commands. */
 	}
 }
 
-
 int addCommand(char *command, char *description, void *address)
 {
 	if(numCommands < MaxCommands)
@@ -121,6 +121,17 @@ void help()
 		}
 	}
 	putchar('\n');
+}
+
+void time()
+{
+    printf("%d",getTime());
+}
+
+void date()
+{
+    readRTC();
+    printf("%d/%d/%d %d:%d", day, month, year, hour, minute);
 }
 
 void ahelp()
@@ -251,7 +262,9 @@ void init_shell()
 	addCommand("add", "Adds two numbers together", addMe);
 	addCommand("sub", "Subtracts one number from another", subtractMe);
 	addCommand("exp", "Multiplies a number against itself an exponential amount of times", exponentMe);
-	addCommand("reset", "Reset shell", init_shell);
+	addCommand("time", "Shows Unix Time",time);
+    addCommand("date", "Shows Calendar date in DD/MM/YYYY HH:MM format", date);
+    addCommand("reset", "Reset shell", init_shell);
 	printf("Username: ");
 	gets(prompt);
 	strcat(prompt, "$ ");
