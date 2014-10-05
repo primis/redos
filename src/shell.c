@@ -48,7 +48,7 @@ void run_shell()
 	int i;
 	char inputstring[512];
 	putchar('\n');
-	printf(prompt);
+	printf("%s",prompt);
 	gets(inputstring);
 	cmdString = strtok(inputstring, " ");
 	cmdSwitch0 = strtok(NULL, " ");
@@ -178,7 +178,7 @@ void outputMe()
 	printf("\nYou typed:");
 	putchar('\n');
 	printf(cmdSwitch0);
-	putchar(' ');
+    putchar(' ');
 	printf(cmdSwitch1);
 	putchar(' ');
 	printf(cmdSwitch2);
@@ -269,5 +269,5 @@ void init_shell()
 	gets(prompt);
 	strcat(prompt, "$ ");
 	puts("\f");                     // Clear the Screen
-	printf("RedOS Shell Version %d\n", SHELL_VER);
+	printf("RedOS Shell Version %s\n", SHELL_VER);
 }
