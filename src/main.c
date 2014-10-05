@@ -2,6 +2,9 @@
 // this is where we set up the drivers, then load init.
 
 #include <kernel/vga.h>
+#include <kernel/kb.h>
+#include <stdio.h>
+#include <kernel/command.h>
 #include <kernel/setup.h>
 #include <kernel/pit.h>
 int main() {
@@ -32,9 +35,16 @@ int main() {
     vgaWrite("[ OK ]\n");
     vgaSetAttribute(0);
 
+    vgaWrite("Setting up Keyboard...\t\t\t\t\t");
+    vgaSetAttribute(0x42);
+    initKeyboard();
+    vgaWrite("[ OK ]\n");
+    vgaSetAttribute(0);
+    
     vgaWrite("\t\t\t    Welcome To Red-OS!\n");
-    for(;;) {
-        sleep(1);
-        vgaWrite("TICK! \n");
-    }   
+    printf("Boot Time: %X", getTime());   
+    init_shell();
+
+    for(;;)
+        run_shell();
 }
