@@ -151,19 +151,19 @@ void keyboardHandler(unsigned int a, ...) {
 
     if(!(kb_special(scanCode) | (scanCode >= 0x80))) {
         if(shift) {
-            if(!caps) {
+            if(!caps) {     // Standard Shift
                 asciiCode = kbScanCodes[scanCode + 128];
-            } else {
-                asciiCode = kbScanCodes[scanCode + 348];
+            } else {        // Shifted Caps
+                asciiCode = kbScanCodes[scanCode + 384];
             }
         } else {
-            if(!caps) {
+            if(!caps) {     // Normal KeyCodes
                 asciiCode = kbScanCodes[scanCode];
-            } else {
+            } else {        // CAPS LOCK IS CRUISE CONTROL FOR COOL
                 asciiCode = kbScanCodes[scanCode + 256];
             }
         }
-        if(keyBuffEnd != 256) {
+        if(keyBuffEnd != 256) { // Unless we hit the end of the buffer
             keyBuffEnd++;
         }
         keyBuffer[keyBuffEnd] = asciiCode;
