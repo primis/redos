@@ -1,4 +1,8 @@
-SOURCES = start.o main.o vga.o ports.o gdt.o string.o ivt.o idt.o pic.o pit.o stdio.o cmos.o kb.o shell.o
+X86SOURCES = arch/x86/start.o arch/x86/vga.o arch/x86/ports.o arch/x86/gdt.o arch/x86/ivt.o arch/x86/idt.o arch/x86/pic.o arch/x86/pit.o arch/x86/cmos.o arch/x86/ps2.o 
+
+LIBCSOURCES = libc/string.o libc/stdio.o
+
+CORESOURCES = core/main.o core/shell.o
 
 # Kernel Makefile
 LD		= i586-elf-ld
@@ -11,13 +15,13 @@ LDFLAGS	= -Tlink.ld
 ASFLAGS	= -felf
 
 #### Targets ####
-all: $(SOURCES) link
+all: $(X86SOURCES) $(CORESOURCES) $(LIBCSOURCES) link
 clean:
 	-rm *.o 
 cleanall:
 	-rm *.o kernel.mod
 link:
-	$(LD) $(LDFLAGS) -o kernel.mod $(SOURCES)
+	$(LD) $(LDFLAGS) -o kernel.mod $(X86SOURCES) $(CORESOURCES) $(LIBCSOURCES)
 .c.o:
 	$(CC) $(CFLAGS) $< -o $@
 .s.o:
