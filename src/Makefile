@@ -19,9 +19,10 @@ all: $(X86SOURCES) $(CORESOURCES) $(LIBCSOURCES) link
 clean:
 	-rm *.o 
 cleanall:
-	-rm *.o kernel.mod
+	-rm *.o *.mod
 link:
-	$(LD) $(LDFLAGS) -o kernel.mod $(X86SOURCES) $(CORESOURCES) $(LIBCSOURCES)
+	$(LD) $(LDFLAGS) -o sys.mod $(X86SOURCES) $(CORESOURCES) $(LIBCSOURCES)
+	strip --strip-all sys.mod
 .c.o:
 	$(CC) $(CFLAGS) $< -o $@
 .s.o:
