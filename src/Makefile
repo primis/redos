@@ -1,8 +1,16 @@
-X86SOURCES = arch/x86/start.o arch/x86/vga.o arch/x86/ports.o arch/x86/gdt.o arch/x86/ivt.o arch/x86/idt.o arch/x86/pic.o arch/x86/pit.o arch/x86/cmos.o arch/x86/ps2.o 
+################################################################################
+## Red OS Kernel Makefile - Updated 10/27/2014 (primis)	                      ##
+################################################################################
 
-LIBCSOURCES = libc/string.o libc/stdio.o
+X86_C_SOURCES = $(shell ls arch/x86/*.c) 
+X86_S_SOURCES = $(shell ls arch/x86/*.s)
+X86_OBJECTS   = $(X86_S_SOURCES:.s=.o) $(X86_C_SOURCES:.c=.o) 
 
-CORESOURCES = core/main.o core/shell.o
+LIBC_SOURCES = $(shell ls libc/*.c)
+LIBC_OBJECTS = $(LIBC_SOURCES:.c=.o)
+
+CORE_SOURCES = $(shell ls core/*.c)
+CORE_OBJECTS = $(CORE_SOURCES:.c=.o)
 
 # Kernel Makefile
 LD		= i586-elf-ld
@@ -15,13 +23,13 @@ LDFLAGS	= -Tlink.ld
 ASFLAGS	= -felf
 
 #### Targets ####
-all: $(X86SOURCES) $(CORESOURCES) $(LIBCSOURCES) link
+all: $(X86_OBJECTS) $(CORE_OBJECTS) $(LIBC_OBJECTS) link
 clean:
 	-rm *.o 
 cleanall:
 	-rm *.o *.mod
 link:
-	$(LD) $(LDFLAGS) -o sys.mod $(X86SOURCES) $(CORESOURCES) $(LIBCSOURCES)
+	$(LD) $(LDFLAGS) -o sys.mod $(X86_OBJECTS) $(CORE_OBJECTS) $(LIBC_OBJECTS)
 	strip --strip-all sys.mod
 .c.o:
 	$(CC) $(CFLAGS) $< -o $@
