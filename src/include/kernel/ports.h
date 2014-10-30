@@ -1,9 +1,11 @@
 #ifndef _KERNEL_PORT_H
 #define _KERNEL_PORT_H
 
-inline void outb(unsigned short _port, unsigned char _data);
-inline unsigned char inb(unsigned short _port);
-inline unsigned short inw(unsigned short _port);
+#include <stdint.h> // So we can use standard types
+
+inline void outb(uint16_t _port, uint8_t _data);
+inline uint8_t inb(uint16_t _port);
+inline uint16_t inw(uint16_t _port);
 
 #endif
 
