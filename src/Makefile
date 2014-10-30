@@ -25,9 +25,7 @@ ASFLAGS	= -felf
 #### Targets ####
 all: $(X86_OBJECTS) $(CORE_OBJECTS) $(LIBC_OBJECTS) link
 clean:
-	-rm *.o 
-cleanall:
-	-rm *.o *.mod
+	find . -type f -name '*.o' -exec rm {} +
 link:
 	$(LD) $(LDFLAGS) -o sys.mod $(X86_OBJECTS) $(CORE_OBJECTS) $(LIBC_OBJECTS)
 	strip --strip-all sys.mod
