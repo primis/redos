@@ -1,21 +1,21 @@
 #ifndef _KERNEL_GDT_H
 #define _KERNEL_GDT_H
 
-#include <stdint.h> // So we can use ctypes
-
-struct gdt_entry_struct {
-    uint16_t limit_low;
-    uint16_t base_low;
-    uint8_t  base_mid;
-    uint8_t  access;
-    uint8_t  granularity;
-    uint8_t  base_high;
+struct gdt_entry_struct
+{
+    unsigned short  limit_low;
+    unsigned short  base_low;
+    unsigned char   base_mid;
+    unsigned char   access;
+    unsigned char   granularity;
+    unsigned char   base_high;
 } __attribute__((packed));
 typedef struct gdt_entry_struct gdt_entry_t;
 
-struct gdt_ptr_struct {
-    uint16_t limit;
-    uint32_t base;
+struct gdt_ptr_struct
+{
+    unsigned short  limit;
+    unsigned int    base;
 } __attribute__((packed));
 typedef struct gdt_ptr_struct gdt_ptr_t;
 

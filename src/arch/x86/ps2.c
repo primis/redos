@@ -1,10 +1,12 @@
 #include <stdio.h>
-#include <kernel/ps2.h>
-#include <stdbool.h>    // For true and false
+#include <kernel/kb.h>
 
-void keyboardHandler(uint32_t a, ...);
+#define true 1
+#define false 0
 
-uint8_t kbScanCodes[512] = 
+void keyboardHandler(unsigned int a, ...);
+
+unsigned char kbScanCodes[512] = 
 {
     0, 27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
     '\t', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[' , ']', '\n', 0,
@@ -54,24 +56,26 @@ uint8_t kbScanCodes[512] =
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-uint8_t shift = false;
-uint8_t ctrl = false;
-uint8_t alt = false;
-uint8_t caps = false;
-uint8_t num = false;
-uint8_t keyBuffer[257];
-uint8_t keyBuffEnd = 0;
+unsigned char shift = false;
+unsigned char ctrl = false;
+unsigned char alt = false;
+unsigned char caps = false;
+unsigned char num = false;
+unsigned char keyBuffer[257];
+unsigned char keyBuffEnd = 0;
 
-uint8_t asciiCode;
-uint8_t leds = 0;
+unsigned char asciiCode;
+unsigned char leds = 0;
 
 
-void flushBuffer()    /* Hardware Buffer */
+void FlushBuffer()    /* Hardware Buffer */
 {
-    uint16_t temp;
-    do {
+    unsigned temp;
+    do
+    {
         temp = inb(0x64);
-        if((temp & 0x01) != 0) {
+        if((temp & 0x01) != 0) 
+        {
             (void)inb(0x60);
             continue;
         }
@@ -79,9 +83,8 @@ void flushBuffer()    /* Hardware Buffer */
 }
 
 
-int32_t kb_special(uint8_t key) 
-{
-    static int32_t specKeyUp = true;    //Is a key already been or being presses
+int kb_special(unsigned char key) {
+    static int specKeyUp = true;    //Is a key already been or being presses
     switch(key) 
     {
         case 0x36: //R-Shift down
@@ -108,7 +111,7 @@ int32_t kb_special(uint8_t key)
             if(specKeyUp == true) 
             {
                 caps = !caps;
-                updateLeds(CapsLock);
+                UpdateLeds(CapsLock);
                 specKeyUp = false;
             }
             break;
@@ -116,7 +119,7 @@ int32_t kb_special(uint8_t key)
             if(specKeyUp == true)
             {
                 num = !num;
-                updateLeds(NumLock);
+                UpdateLeds(NumLock);
                 specKeyUp = false;
             }
             break;
@@ -124,7 +127,7 @@ int32_t kb_special(uint8_t key)
             if(specKeyUp == true)
             {
                 num = !num;
-                updateLeds(ScrollLock);
+                UpdateLeds(ScrollLock);
                 specKeyUp = false;
             }
             break;
@@ -141,10 +144,10 @@ int32_t kb_special(uint8_t key)
     return (1);
 }
 
-void keyboardHandler(uint32_t a, ...) {
-    uint8_t scanCode;
+void keyboardHandler(unsigned int a, ...) {
+    unsigned char scanCode;
     scanCode = inb(0x60);
-    uint8_t asciiCode;
+    unsigned char asciiCode;
 
     if(!(kb_special(scanCode) | (scanCode >= 0x80))) {
         if(shift) {
@@ -167,7 +170,7 @@ void keyboardHandler(uint32_t a, ...) {
     }
 }
 
-int8_t getchar_int()
+char getchar_int()
 {
     int i = 0;
     while(keyBuffEnd == 0);
@@ -182,8 +185,7 @@ int8_t getchar_int()
     return keyBuffer[0];   
 }
 
-void updateLeds(uint8_t led) 
-{
+void UpdateLeds(unsigned char led) {
     if(led == 0) {
         leds = 0;
     } else {
@@ -193,21 +195,19 @@ void updateLeds(uint8_t led)
             leds = leds | led;
         }
     }
-    while((inb(0x64) &2) !=0);  // Wait for PS/2 Controller to be ready
-    outb(0x60, 0xED);           // Send Command to change LED State
-    while((inb(0x64) &2) !=0);  // Wait for PS/2 Controller again
-    outb(0x60, leds);           // Send LED bitmap to controller.
+    while((inb(0x64) &2) !=0);
+    outb(0x60, 0xED);
+    while((inb(0x64) &2) !=0);
+    outb(0x60, leds);
 }
 
-void waitKey()
-{
-    flushBuffer();
+void waitKey() {
+    FlushBuffer();
     while (getchar_int() == 0);
 }
 
-void initKeyboard() 
-{
-    flushBuffer();
+void initKeyboard() {
+    FlushBuffer();
     asm("cli");
     interruptHandlerRegister(0x21,&keyboardHandler);
     clearIRQMask(1);

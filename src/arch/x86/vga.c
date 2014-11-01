@@ -5,46 +5,45 @@
 #define VGAPORT 0x3D4
 #define VGALOC 0xB8000
 
-uint16_t *vgaTextBuffer;
-uint16_t vgaAttribute;
-uint8_t  vgaCursorX, vgaCursorY;
+unsigned short *vgaTextBuffer;
+unsigned short vgaAttribute;
+unsigned char  vgaCursorX, vgaCursorY;
 
-void vgaScroll() 
-{
-    uint32_t blank = ' ' | vgaAttribute;    // Blank is Space OR'd with color
-    int i;
-    for(i=0; i<24*80; i++) {            // Move everything up a line
-        vgaTextBuffer[i] = vgaTextBuffer[i+80];
+void vgaScroll() {
+    unsigned int blank = ' ' | vgaAttribute;
+    if(vgaCursorY >= 25) { 
+        int i;
+        for(i=0; i<24*80; i++) {
+            vgaTextBuffer[i] = vgaTextBuffer[i+80];
+        }
+        for(i=24*80; i<25*80; i++) {
+            vgaTextBuffer[i] = blank;
+        }
+        vgaCursorY = 24;
     }
-    for(i=24*80; i<25*80; i++) {
-        vgaTextBuffer[i] = blank;       // Replace last line with blanks.
-    }
-    vgaCursorY = 24;
 }
 
-static void vgaMoveCursor(uint8_t _x, uint8_t _y) 
-{
+static void vgaMoveCursor(unsigned char _x, unsigned char _y) {
     unsigned short cursorLoc = (_y*80) + _x;
-    outb(VGAPORT, 14);              // Tell VGA we're moving Cursor      
-    outb(VGADATA, cursorLoc>>8);    // First 8 Bits
-    outb(VGAPORT, 15);              // Tell VGA we're moving Cursor (2nd half)
-    outb(VGADATA, cursorLoc);       // Last 8 Bits
+    outb(VGAPORT, 14);      
+    outb(VGADATA, cursorLoc>>8);
+    outb(VGAPORT, 15);
+    outb(VGADATA, cursorLoc);
     vgaCursorX = _x;
     vgaCursorY = _y;
 }
 
-void vgaClear() 
-{
+void vgaClear() {
+    unsigned int blank = ' ' | vgaAttribute;
     int i;
-    for(i=0;i<24;i++) {
-        vgaScroll();    // Scroll up 24 times. Making entire scren blank.
+    for(i=1;i<25*80;i++) {
+        vgaTextBuffer[i] = blank;
     }
-    vgaMoveCursor(0,0); // Set cursor since scroll moves it to 24 instead of 0.
+    vgaMoveCursor(0,0);
 }
 
-void vgaPutChar(int8_t _c) 
-{
-    uint16_t *loc;
+void vgaPutChar(char _c) {
+    unsigned short *loc;
     if (_c == 0x08 && vgaCursorX) { // Backspace
         vgaCursorX--;
         vgaPutChar(' ');
@@ -60,33 +59,28 @@ void vgaPutChar(int8_t _c)
         vgaClear();
     } else if (_c >= ' ') {
         loc = vgaTextBuffer + vgaCursorX + (vgaCursorY * 80);
-        *loc = (uint16_t)_c | vgaAttribute;
+        *loc = (unsigned short)_c | vgaAttribute;
         vgaCursorX++;
     } 
     if (vgaCursorX >= 80) {
         vgaPutChar('\n');
     }
-    if(vgaCursorY >=24) {
-        vgaScroll();    // Scroll up a line if we hit the bottom of the screen.
-    }
+    vgaScroll();
     vgaMoveCursor(vgaCursorX, vgaCursorY);
 }
-void vgaWrite(int8_t *_s)
-{
+void vgaWrite(char *_s) {
     while(*_s) {
         vgaPutChar(*_s++);
     }
 }
-void vgaSetAttribute(int8_t _a)
-{
-    vgaAttribute = (_a << 8);
-    if(_a == 0) {
+void vgaSetAttribute(char a) {
+    vgaAttribute = (a << 8);
+    if(a == 0) {
         vgaAttribute = (0x4f << 8);
     }
 }
-void vgaInit() 
-{
+void vgaInit() {
     vgaAttribute = (0x4F << 8);
-    vgaTextBuffer = (uint16_t*)VGALOC;
+    vgaTextBuffer = (unsigned short*)VGALOC;
     vgaClear();
 }

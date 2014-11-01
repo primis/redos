@@ -4,7 +4,7 @@
 #include <kernel/ports.h>
 #include <kernel/idt.h>
 
-void sleep(int32_t seconds);
+void sleep(int);
 
 #define PIT_BASE_FREQ   1193182     // 1.1061816666 MHz
 

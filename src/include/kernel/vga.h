@@ -1,10 +1,8 @@
 #ifndef _KERNEL_VGA_H
 #define _KERNEL_VGA_H
 
-#include <stdint.h>
-
-void vgaPutChar(int8_t _charecter);
-void vgaWrite(int8_t *_string);
-void vgaInit(void);
-void vgaSetAttribute(int8_t _attribute);
+void vgaPutChar(char _c);
+void vgaWrite(char *_s);
+void vgaInit();
+void vgaSetAttribute(char a);
 #endif

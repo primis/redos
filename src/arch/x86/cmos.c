@@ -1,28 +1,26 @@
 #include <kernel/ports.h>
+
 #define CMOS_DATA    0x71
 #define CMOS_ADDRESS 0x70
 
-int32_t century_register = 0x00;
-uint8_t second;
-uint8_t minute;
-uint8_t hour;
-uint8_t day;
-uint8_t month;
-uint8_t year;
+int century_register = 0x00;
+unsigned char second;
+unsigned char minute;
+unsigned char hour;
+unsigned char day;
+unsigned char month;
+unsigned int  year;
 void readRTC();
 
-int8_t getCMOSRegister(int8_t _reg)
-{
-    outb(CMOS_ADDRESS, _reg);
+int getCMOSRegister(int reg) {
+    outb(CMOS_ADDRESS, reg);
     return inb(CMOS_DATA);
 }
-
-int32_t getTime()
-{
+int getTime() {
     readRTC();
 
-    int32_t leapDays = ((year - 1972)/4) + 1;
-    int32_t time;
+    int leapDays = ((year - 1972)/4) + 1;
+    int time;
     
     if(year/4 == 0) {
         if(month <=2) {
@@ -76,17 +74,16 @@ int32_t getTime()
     return time;
 }
 
-void readRTC() 
-{
-    uint8_t century;
-    uint8_t last_second;
-    uint8_t last_minute;
-    uint8_t last_hour;
-    uint8_t last_day;
-    uint8_t last_month;
-    uint8_t last_year;
-    uint8_t last_century;
-    uint8_t register_b;
+void readRTC() {
+    unsigned char century;
+    unsigned char last_second;
+    unsigned char last_minute;
+    unsigned char last_hour;
+    unsigned char last_day;
+    unsigned char last_month;
+    unsigned char last_year;
+    unsigned char last_century;
+    unsigned char register_b;
  
 //    while(get_update_in_progress_flag());   // Updates mean wrong info
     second  = getCMOSRegister(0x00);
