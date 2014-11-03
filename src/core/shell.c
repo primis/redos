@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include <kernel/kb.h>
+#include <kernel/arch/x86/ps2.h>
 #include <kernel/command.h>
 #include <time.h>
 

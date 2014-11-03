@@ -1,12 +1,10 @@
 #include <stdio.h>
-#include <kernel/kb.h>
+#include <kernel/arch/x86/ps2.h>
+#include <stdbool.h>
 
-#define true 1
-#define false 0
+void keyboardHandler(uint32_t a, ...);
 
-void keyboardHandler(unsigned int a, ...);
-
-unsigned char kbScanCodes[512] = 
+uint8_t kbScanCodes[512] = 
 {
     0, 27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
     '\t', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[' , ']', '\n', 0,
@@ -56,21 +54,21 @@ unsigned char kbScanCodes[512] =
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-unsigned char shift = false;
-unsigned char ctrl = false;
-unsigned char alt = false;
-unsigned char caps = false;
-unsigned char num = false;
-unsigned char keyBuffer[257];
-unsigned char keyBuffEnd = 0;
+uint8_t shift = false;
+uint8_t ctrl = false;
+uint8_t alt = false;
+uint8_t caps = false;
+uint8_t num = false;
+uint8_t keyBuffer[257];
+uint8_t keyBuffEnd = 0;
 
-unsigned char asciiCode;
-unsigned char leds = 0;
+uint8_t asciiCode;
+uint8_t leds = 0;
 
 
 void FlushBuffer()    /* Hardware Buffer */
 {
-    unsigned temp;
+    uint16_t temp;
     do
     {
         temp = inb(0x64);
@@ -83,8 +81,9 @@ void FlushBuffer()    /* Hardware Buffer */
 }
 
 
-int kb_special(unsigned char key) {
-    static int specKeyUp = true;    //Is a key already been or being presses
+int32_t kb_special(uint8_t key) 
+{
+    static int32_t specKeyUp = true;    //Is a key already been or being presses
     switch(key) 
     {
         case 0x36: //R-Shift down
@@ -144,10 +143,11 @@ int kb_special(unsigned char key) {
     return (1);
 }
 
-void keyboardHandler(unsigned int a, ...) {
-    unsigned char scanCode;
+void keyboardHandler(uint32_t a, ...) 
+{
+    uint8_t scanCode;
     scanCode = inb(0x60);
-    unsigned char asciiCode;
+    uint8_t asciiCode;
 
     if(!(kb_special(scanCode) | (scanCode >= 0x80))) {
         if(shift) {
@@ -170,7 +170,7 @@ void keyboardHandler(unsigned int a, ...) {
     }
 }
 
-char getchar_int()
+int8_t getchar_int()
 {
     int i = 0;
     while(keyBuffEnd == 0);
@@ -185,7 +185,8 @@ char getchar_int()
     return keyBuffer[0];   
 }
 
-void UpdateLeds(unsigned char led) {
+void UpdateLeds(uint8_t led) 
+{
     if(led == 0) {
         leds = 0;
     } else {
@@ -206,7 +207,8 @@ void waitKey() {
     while (getchar_int() == 0);
 }
 
-void initKeyboard() {
+void initKeyboard() 
+{
     FlushBuffer();
     asm("cli");
     interruptHandlerRegister(0x21,&keyboardHandler);

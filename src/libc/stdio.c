@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <kernel/vga.h>
-#include <kernel/kb.h>
+#include <kernel/arch/x86/ps2.h>
 
 #if 1
 #include <stdarg.h> /* va_list, va_start(), va_arg(), va_end() */

@@ -2,7 +2,7 @@
 // this is where we set up the drivers, then load init.
 
 #include <kernel/vga.h>
-#include <kernel/kb.h>
+#include <kernel/arch/x86/ps2.h>
 #include <stdio.h>
 #include <kernel/command.h>
 #include <kernel/setup.h>
