@@ -1,4 +1,4 @@
-redos
+Red-OS
 =====
 
 Implemented Features:
