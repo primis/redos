@@ -1,7 +1,7 @@
 #ifndef _KERNEL_ARCH_X86_PS2_H
 #define _KERNEL_ARCH_X86_PS2_H
 
-#include <kernel/idt.h>
+#include <kernel/arch/x86/idt.h>
 #include <stdint.h>
 
 #define ScrollLock (uint8_t)0x01

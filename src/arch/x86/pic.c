@@ -1,5 +1,5 @@
 #include <kernel/vga.h>
-#include <kernel/idt.h>
+#include <kernel/arch/x86/idt.h>
 #include <kernel/ports.h>
 
 extern void_callback_arg_t interruptHandlers[];
