@@ -9,3 +9,9 @@ Implemented Features:
 * Grand Descriptor Table implemented
 
 Lots More to come
+
+stdint
+======
+So <stdint.h> exists. I'm gonna use it.
+All mission critical primitive types will be changed to stdint types.
+This will allow porting to other platforms of different word size easier.
