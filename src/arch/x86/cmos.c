@@ -33,7 +33,7 @@ int getTime()
     int leapDays = ((year - 1972)/4) + 1;   /* How many leap days to add on   */
     int time;
 
-    if ((year/4 == 0) && (month <=2)) {     /* Is it before Feb & a leap year */
+    if ((year%4 == 0) && (month <=2)) {     /* Is it before Feb & a leap year */
             leapDays--;                     /* Leap day didn't happen yet.    */
     }       
 
