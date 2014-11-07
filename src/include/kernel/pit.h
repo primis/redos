@@ -1,7 +1,7 @@
 #ifndef _KERNEL_PIT_H
 #define _KERNEL_PIT_H
 
-#include <kernel/ports.h>
+#include <kernel/arch/x86/ports.h>
 #include <kernel/arch/x86/idt.h>
 
 void sleep(int);

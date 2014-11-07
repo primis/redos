@@ -1,4 +1,4 @@
-#include <kernel/ports.h>
+#include <kernel/arch/x86/ports.h>
 #include <kernel/vga.h>
 
 #define VGADATA 0x3D5
