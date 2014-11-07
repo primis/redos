@@ -18,7 +18,7 @@ static void idtSetGate(uint8_t n, uint32_t base, uint16_t sel, uint8_t flags)
     idt[n].flags    = flags;
 }
 
-void interruptHandlerRegister(uint32_t intNum, void_callback_arg_t function) 
+void interruptHandlerRegister(uint32_t intNum, void_callback_arg_t function)
 {   /* Jump table for calling functions when an interrupt triggers            */
     interruptHandlers[intNum] = function;
 }
@@ -26,13 +26,13 @@ void interruptHandlerRegister(uint32_t intNum, void_callback_arg_t function)
 void unhandledInterrupt(uint32_t intNum, ...)
 {   /* Default Case for an interrupt */
     vgaWrite("Unhandled Interrupt!");
-    for(;;); 
+    for(;;);
 }
 
 void isrHandler(struct regs *r)
 {   /* Jump to the handler and pass the registers as arguments                */
     void_callback_arg_t handler = interruptHandlers[r->int_no];
-    handler(r->int_no,r->err_code,r->eax,r->ebx,r->ecx,r->edx,r->edi,r->esi);   
+    handler(r->int_no,r->err_code,r->eax,r->ebx,r->ecx,r->edx,r->edi,r->esi);
 }
 
 void idtInit()

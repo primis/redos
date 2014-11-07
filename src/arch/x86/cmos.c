@@ -35,7 +35,7 @@ int getTime()
 
     if ((year%4 == 0) && (month <=2)) {     /* Is it before Feb & a leap year */
             leapDays--;                     /* Leap day didn't happen yet.    */
-    }       
+    }
 
     time = second;
     time += (minute * 60);
@@ -54,7 +54,7 @@ void readRTC()
     uint8_t last_second, last_minute, last_hour;
     uint8_t last_day, last_month, last_year, last_century;
     uint8_t register_b;
- 
+
     while(getUpdateInProgressFlag());   /* Wait until cmos is available */
     second  = getCMOSRegister(CMOS_REGISTER_SECONDS);
     minute  = getCMOSRegister(CMOS_REGISTER_MINUTES);
@@ -84,7 +84,7 @@ void readRTC()
     } while ((last_second != second) || (last_minute != minute) || (last_hour != hour) ||
         (last_day != day) || (last_month != month) || (last_year != year) ||
         (last_century != century) );
-    
+
     register_b = getCMOSRegister(0x0B);
     // Convert from BCD if needed
     if (!(register_b & 0x04)) {

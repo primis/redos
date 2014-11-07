@@ -7,7 +7,7 @@ extern void_callback_arg_t interruptHandlers[];
 void setIRQMask(int IRQ) {
     unsigned short port;
     unsigned char mask;
-    
+
     if(IRQ < 8) {
         port = 0x21;
     } else {
@@ -21,7 +21,7 @@ void setIRQMask(int IRQ) {
 void clearIRQMask(int IRQ) {
     unsigned short port;
     unsigned char mask;
-    
+
     if(IRQ < 8) {
         port = 0x21;
     } else {
@@ -35,15 +35,15 @@ void clearIRQMask(int IRQ) {
 void picInit()
 {
     unsigned short masterPIC = 0x20;
-    unsigned short slavePIC  = 0xA0; 
-    
+    unsigned short slavePIC  = 0xA0;
+
 
     outb(masterPIC, 0x11);
     outb(slavePIC, 0x11);
-    
+
     outb(masterPIC + 1, 0x20);
     outb(slavePIC  + 1, 0x28);
-    
+
     outb(masterPIC + 1, 4);
     outb(slavePIC  + 1, 2);
 

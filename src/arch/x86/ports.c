@@ -7,8 +7,8 @@ inline void outb(unsigned short _port, unsigned char _data) {
 
 inline unsigned char inb(unsigned short _port) {
     unsigned char ret;
-    asm volatile("inb %1, %0" 
-        : "=a" (ret) 
+    asm volatile("inb %1, %0"
+        : "=a" (ret)
         : "dN" (_port)
     );
     return ret;
@@ -16,9 +16,9 @@ inline unsigned char inb(unsigned short _port) {
 unsigned short inw(unsigned short _port)
 {
     unsigned short ret;
-    asm volatile ("inw %1, %0" 
+    asm volatile ("inw %1, %0"
         : "=a" (ret)
         : "dN" (_port)
     );
     return ret;
-} 
+}

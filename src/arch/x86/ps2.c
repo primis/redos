@@ -4,7 +4,7 @@
 
 void keyboardHandler(uint32_t a, ...);
 
-uint8_t kbScanCodes[512] = 
+uint8_t kbScanCodes[512] =
 {
     0, 27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '\b',
     '\t', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[' , ']', '\n', 0,
@@ -72,7 +72,7 @@ void FlushBuffer()    /* Hardware Buffer */
     do
     {
         temp = inb(0x64);
-        if((temp & 0x01) != 0) 
+        if((temp & 0x01) != 0)
         {
             (void)inb(0x60);
             continue;
@@ -81,10 +81,10 @@ void FlushBuffer()    /* Hardware Buffer */
 }
 
 
-int32_t kb_special(uint8_t key) 
+int32_t kb_special(uint8_t key)
 {
     static int32_t specKeyUp = true;    //Is a key already been or being presses
-    switch(key) 
+    switch(key)
     {
         case 0x36: //R-Shift down
         case 0x2A: //L-Shift down
@@ -107,7 +107,7 @@ int32_t kb_special(uint8_t key)
             alt = false;
             break;
         case 0x3A: //Caps down
-            if(specKeyUp == true) 
+            if(specKeyUp == true)
             {
                 caps = !caps;
                 UpdateLeds(CapsLock);
@@ -143,7 +143,7 @@ int32_t kb_special(uint8_t key)
     return (1);
 }
 
-void keyboardHandler(uint32_t a, ...) 
+void keyboardHandler(uint32_t a, ...)
 {
     uint8_t scanCode;
     scanCode = inb(0x60);
@@ -174,7 +174,7 @@ int8_t getchar_int()
 {
     int i = 0;
     while(keyBuffEnd == 0);
-    
+
     asm("cli");
     for(; i < keyBuffEnd; i++) {
         keyBuffer[i] = keyBuffer[i+1];
@@ -182,10 +182,10 @@ int8_t getchar_int()
     keyBuffEnd--;
     asm("sti");
     putchar(keyBuffer[0]);
-    return keyBuffer[0];   
+    return keyBuffer[0];
 }
 
-void UpdateLeds(uint8_t led) 
+void UpdateLeds(uint8_t led)
 {
     if(led == 0) {
         leds = 0;
@@ -207,7 +207,7 @@ void waitKey() {
     while (getchar_int() == 0);
 }
 
-void initKeyboard() 
+void initKeyboard()
 {
     FlushBuffer();
     asm("cli");

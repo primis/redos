@@ -8,7 +8,7 @@
 #include <kernel/setup.h>
 #include <kernel/pit.h>
 int main() {
-    
+
     vgaInit();
 
     vgaWrite("Setting up the GDT...\t\t\t\t\t");
@@ -16,7 +16,7 @@ int main() {
     vgaSetAttribute(0x42);
     vgaWrite("[ OK ]\n");
     vgaSetAttribute(0);
-    
+
     vgaWrite("Setting up the IDT...\t\t\t\t\t");
     idtInit();
     vgaSetAttribute(0x42);
@@ -28,7 +28,7 @@ int main() {
     picInit();
     vgaWrite("[ OK ]\n");
     vgaSetAttribute(0);
-    
+
     vgaWrite("Setting up the Timer at 100Hz...\t\t\t");
     vgaSetAttribute(0x42);
     pitInit(100);
@@ -42,7 +42,7 @@ int main() {
     vgaSetAttribute(0);
     readRTC();
     vgaWrite("\t\t\t    Welcome To Red-OS!\n");
-    printf("Boot Time: %d",getTime());   
+    printf("Boot Time: %d",getTime());
     init_shell();
 
     for(;;)

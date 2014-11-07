@@ -6,8 +6,8 @@
 ;           Symbol table              ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;   MULTIBOOT HEADER SPEC     
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+;   MULTIBOOT HEADER SPEC
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 MB_PAGE_ALIGN   equ 1<<0
 MB_MEM_INFO     equ 1<<1
 MB_MAGIC        equ 0x1BADB002

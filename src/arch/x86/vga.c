@@ -11,7 +11,7 @@ unsigned char  vgaCursorX, vgaCursorY;
 
 void vgaScroll() {
     unsigned int blank = ' ' | vgaAttribute;
-    if(vgaCursorY >= 25) { 
+    if(vgaCursorY >= 25) {
         int i;
         for(i=0; i<24*80; i++) {
             vgaTextBuffer[i] = vgaTextBuffer[i+80];
@@ -25,7 +25,7 @@ void vgaScroll() {
 
 static void vgaMoveCursor(unsigned char _x, unsigned char _y) {
     unsigned short cursorLoc = (_y*80) + _x;
-    outb(VGAPORT, 14);      
+    outb(VGAPORT, 14);
     outb(VGADATA, cursorLoc>>8);
     outb(VGAPORT, 15);
     outb(VGADATA, cursorLoc);
@@ -61,7 +61,7 @@ void vgaPutChar(char _c) {
         loc = vgaTextBuffer + vgaCursorX + (vgaCursorY * 80);
         *loc = (unsigned short)_c | vgaAttribute;
         vgaCursorX++;
-    } 
+    }
     if (vgaCursorX >= 80) {
         vgaPutChar('\n');
     }
