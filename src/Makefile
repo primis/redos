@@ -16,6 +16,7 @@ CORE_OBJECTS = $(CORE_SOURCES:.c=.o)
 LD		= i586-elf-ld
 CC		= i586-elf-gcc
 AS		= nasm
+STRIP   = i586-elf-strip
 
 #### Flags ####
 CFLAGS	= -ffreestanding -c -I./include
@@ -28,7 +29,7 @@ clean:
 	find . -type f -name '*.o' -exec rm {} +
 link:
 	$(LD) $(LDFLAGS) -o sys.mod $(X86_OBJECTS) $(CORE_OBJECTS) $(LIBC_OBJECTS)
-	strip --strip-all sys.mod
+	$(STRIP) --strip-all sys.mod
 .c.o:
 	$(CC) $(CFLAGS) $< -o $@
 .s.o:
