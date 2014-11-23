@@ -1,64 +1,67 @@
-#include <kernel/vga.h>
-#include <kernel/arch/x86/idt.h>
-#include <kernel/arch/x86/ports.h>
+#include <kernel/arch/x86/pic.h>    /* PIC  Declarations                      */
+#include <kernel/arch/x86/idt.h>    /* regs, void_callback_arg_t              */ 
+#include <kernel/arch/x86/ports.h>  /* inb, outb                              */
 
 extern void_callback_arg_t interruptHandlers[];
 
-void setIRQMask(int IRQ) {
-    unsigned short port;
-    unsigned char mask;
+void setIRQMask(int IRQ) 
+{
+    uint16_t port;
+    uint8_t  mask;
 
-    if(IRQ < 8) {
-        port = 0x21;
+    if(IRQ < 8) {                   /* Which PIC do we send to?               */
+        port = PIC1_DATA;
     } else {
-        port = 0xA1;
+        port = PIC2_DATA;
         IRQ -= 8;
     }
-    mask = inb(port) | (1 << IRQ);
+    mask = inb(port) | (1 << IRQ);  /* Get Mask from PIC then bitset IRQ on   */
     outb(port, mask);
 }
 
-void clearIRQMask(int IRQ) {
-    unsigned short port;
-    unsigned char mask;
+void clearIRQMask(int IRQ)
+{
+    uint16_t port;
+    uint8_t  mask;
 
     if(IRQ < 8) {
-        port = 0x21;
+        port = PIC1_DATA;           /* Which PIC do we send to?               */
     } else {
-        port = 0xA1;
+        port = PIC2_DATA;
         IRQ -= 8;
     }
-    mask = inb(port) & ~(1 << IRQ);
+    mask = inb(port) & ~(1 << IRQ); /* Get mask & unset the IRQ's Bit         */
     outb(port, mask);
 }
 
 void picInit()
 {
-    unsigned short masterPIC = 0x20;
-    unsigned short slavePIC  = 0xA0;
+    uint8_t offset1 = 0x20;     /* Vector Table Offsets for the two PICs      */
+    uint8_t offset2 = 0x28; 
 
+/*  Init sequence starts with ICW1, then iterates through till ICW4           */
+    outb(PIC1_CMD, PIC_INIT);
+    outb(PIC2_CMD, PIC_INIT);
 
-    outb(masterPIC, 0x11);
-    outb(slavePIC, 0x11);
+    outb(PIC1_DATA, offset1);   /* ICW2: Vector Table Offsets                 */
+    outb(PIC2_DATA, offset2);
 
-    outb(masterPIC + 1, 0x20);
-    outb(slavePIC  + 1, 0x28);
+    outb(PIC1_DATA, 0x4);       /* ICW3 Master: Location of Slave PIC         */
+    outb(PIC2_DATA, 0x2);       /* ICW3 Slave:  Cascade ID                    */
 
-    outb(masterPIC + 1, 4);
-    outb(slavePIC  + 1, 2);
+    outb(PIC1_DATA, ICW4_8086); /* ICW4: Operating Mode                       */ 
+    outb(PIC2_DATA, ICW4_8086); 
 
-    outb(masterPIC + 1, 1);
-    outb(slavePIC  + 1, 1);
-
-    outb(masterPIC + 1, 0xFF);
-    outb(slavePIC  + 1, 0xFF);
+    outb(PIC1_DATA, 0xFF);      /* Init over, Mask all Interrupts.            */
+    outb(PIC2_DATA, 0xFF);
 }
 
-void irqHandler(struct regs *r) {
+void irqHandler(struct regs *r)
+{
     if (r->int_no >= 40) {
-        outb(0xA0, 0x20);
+        outb(PIC2_CMD, PIC_EOI);
     }
-    outb(0x20, 0x20);
+    outb(PIC1_CMD, PIC_EOI);
     void_callback_arg_t handler = interruptHandlers[r->int_no];
     handler(r->int_no,r->err_code,r->eax,r->ebx,r->ecx,r->edx,r->edi,r->esi);
 }

@@ -23,7 +23,7 @@ int main() {
     vgaWrite("[ OK ]\n");
     vgaSetAttribute(0);
 
-    vgaWrite("Turning on the PIC's...\t\t\t\t\t");
+    vgaWrite("Masking Hardware Interrupts...\t\t\t\t");
     vgaSetAttribute(0x42);
     picInit();
     vgaWrite("[ OK ]\n");
