@@ -22,7 +22,7 @@ void gdtInit()
     }
 
     gdtPointer.base  = (uint32_t)&gdt;           /* Pointer to the gdt itself */
-    gdtPointer.limit = (sizeof(gdt_entry_t)*5) - 1; /* The last descriptor    */
+    gdtPointer.limit = (sizeof(gdt_entry_t)*5) - 1; /* The last descriptor   */
     gdt_flush((uint32_t)&gdtPointer);
 }
 
@@ -36,7 +36,7 @@ void gdtSetGate(int32_t n, uint32_t base, uint32_t lim, uint32_t flag)
     gdt[n].hi  |= (base >> 16) & 0x000000FF; /* Set Base Bits 23 - 16         */
     gdt[n].hi  |= base         & 0xFF000000; /* Set Base Bits 31 - 24         */
 
-    /* Create the hi 32 bits of the segment                                  */
+    /* Create the hi 32 bits of the segment                                   */
     gdt[n].low |= base << 16;               /* Set Base  bits 15 - 0          */
     gdt[n].low |= lim & 0x0000FFFF;         /* Set Limit bits 15 - 0          */
 

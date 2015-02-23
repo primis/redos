@@ -83,7 +83,7 @@ void FlushBuffer()    /* Hardware Buffer */
 
 int32_t kb_special(uint8_t key)
 {
-    static int32_t specKeyUp = true;    //Is a key already been or being presses
+    static int32_t specKeyUp = true;    //Is a key already been or being pressed
     switch(key)
     {
         case 0x36: //R-Shift down
