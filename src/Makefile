@@ -1,5 +1,5 @@
 ################################################################################
-## Red OS Kernel Makefile - Updated 10/27/2014 (primis)	                      ##
+## Red OS Kernel Makefile - Updated 10/27/2014 (primis)			      ##
 ################################################################################
 
 X86_C_SOURCES = $(shell ls arch/x86/*.c) 
@@ -13,14 +13,13 @@ CORE_SOURCES = $(shell ls core/*.c)
 CORE_OBJECTS = $(CORE_SOURCES:.c=.o)
 
 # Kernel Makefile
-LD		= i586-elf-ld
-CC		= i586-elf-gcc
-AS		= nasm
-STRIP   = i586-elf-strip
+CC	= i586-elf-gcc
+AS	= nasm
+STRIP	= i586-elf-strip
 
 #### Flags ####
-CFLAGS	= -ffreestanding -c -I./include
-LDFLAGS	= -Tlink.ld
+CFLAGS	= -ffreestanding -fbuiltin -nostdlib -I./include
+LDFLAGS	= -Tlink.ld -lgcc
 ASFLAGS	= -felf
 
 #### Targets ####
@@ -28,9 +27,9 @@ all: $(X86_OBJECTS) $(CORE_OBJECTS) $(LIBC_OBJECTS) link
 clean:
 	find . -type f -name '*.o' -exec rm {} +
 link:
-	$(LD) $(LDFLAGS) -o sys.mod $(X86_OBJECTS) $(CORE_OBJECTS) $(LIBC_OBJECTS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o sys.mod $(X86_OBJECTS) $(CORE_OBJECTS) $(LIBC_OBJECTS)
 	$(STRIP) --strip-all sys.mod
 .c.o:
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) -c $< -o $@ $(CFLAGS)
 .s.o:
 	$(AS) $(ASFLAGS) $< -o $@
