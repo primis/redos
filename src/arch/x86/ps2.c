@@ -202,7 +202,8 @@ void UpdateLeds(uint8_t led)
     outb(0x60, leds);
 }
 
-void waitKey() {
+void waitKey() 
+{
     FlushBuffer();
     while (getchar_int() == 0);
 }
